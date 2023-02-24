@@ -1,0 +1,44 @@
+Produtos {
+    codigo pk
+    nome
+    descricao
+}
+
+Fornecedors_Produtos {
+    fornecedor -> Fornecedores pk(0)
+    produto -> Produtos pk(1)
+}
+
+Fornecedores {
+    codigo pk
+    nome
+    cnpj
+    endereco
+}
+
+Clientes {
+    codigo pk
+    nome
+    endereco
+}
+
+Vendas_Produtos{
+    venda -> Vendas pk(0)
+    produto -> Produtos pk(1)
+    quantidade
+    preço
+}
+
+Vendas {
+    loja -> Lojas pk(0)
+    num_nota_fiscal pk(1)
+    cliente -> Clientes
+    valor_total
+    data
+}
+
+Lojas {
+    codigo pk
+    nome
+    cnpj
+}
