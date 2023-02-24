@@ -1,4 +1,5 @@
 import boto3 as aws
+from boto3.dynamodb.conditions import Key, Attr
 from decimal import Decimal
 
 class Connection:
