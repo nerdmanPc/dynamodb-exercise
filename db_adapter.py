@@ -1,6 +1,7 @@
 import boto3 as aws
 from boto3.dynamodb.conditions import Key, Attr
 from decimal import Decimal
+from pprint import pprint
 
 class Connection:
     #Credentials need to be set up beforehand
@@ -37,8 +38,22 @@ class Table:
     def delete_item(self, key: dict):
         return self._dynamo_table.delete_item(Key=key)
 
+    def query(self, key_expr, filter_expr=None):
+        query_args = {
+            'KeyConditionExpression': key_expr
+        }
+        if filter_expr is not None:
+            query_args['FilterExpression'] = filter_expr
+        return self._dynamo_table.query(**query_args)['Items']
+
 def _convert_float(x):
     if isinstance(x, float):
         return Decimal(x)
     else:
         return x
+
+#conn = Connection()
+#table = conn.get_table('Fornecedores_Produtos')
+#pprint(table.query(
+#    Key('fornecedor').eq(0) & Key('produto').eq(4)
+#))
