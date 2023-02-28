@@ -44,7 +44,31 @@ class Table:
         }
         if filter_expr is not None:
             query_args['FilterExpression'] = filter_expr
-        return self._dynamo_table.query(**query_args)['Items']
+
+        response = self._dynamo_table.query(**query_args)
+        items = response['Items']
+
+        while 'LastEvaluatedKey' in response:
+            query_args['ExclusiveStartKey'] = response['LastEvaluatedKey']
+            response = self._dynamo_table.query(**query_args)
+            items.extend(response['Items'])
+
+        return items
+    
+    def scan(self, filter_expr=None):
+        query_args = dict()
+        if filter_expr is not None:
+            query_args['FilterExpression'] = filter_expr
+
+        response = self._dynamo_table.scan(**query_args)
+        items = response['Items']
+
+        while 'LastEvaluatedKey' in response:
+            query_args['ExclusiveStartKey'] = response['LastEvaluatedKey']
+            response = self._dynamo_table.scan(**query_args)
+            items.extend(response['Items'])
+
+        return items
 
 def _convert_float(x):
     if isinstance(x, float):
