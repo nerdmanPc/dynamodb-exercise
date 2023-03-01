@@ -1,7 +1,7 @@
 import boto3 as aws
 from boto3.dynamodb.conditions import Key, Attr
 from decimal import Decimal
-from pprint import pprint
+#from pprint import pprint
 
 class Connection:
     #Credentials need to be set up beforehand
@@ -10,11 +10,18 @@ class Connection:
 
     def get_table(self, name: str):
         return Table(self._dynamodb.Table(name))
+    
+    def get_tables(self):
+        tables = self._dynamodb.tables.all()
+        return {table.name: Table(table) for table in tables}
 
 class Table:
     #Use on this module only
     def __init__(self, dynamo_table):
         self._dynamo_table = dynamo_table
+
+    def key_schema(self):
+        return self._dynamo_table.key_schema
 
     def put_item(self, item: dict):
         item = {k: _convert_float(v) for k, v in item.items()}

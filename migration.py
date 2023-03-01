@@ -3,13 +3,13 @@ from pprint import pprint
 from db_adapter import *
 
 tables = {
-    'Clientes': pd.read_csv('clientes.csv'),
-    'Produtos': pd.read_csv('produtos.csv'),
-    'Fornecedores': pd.read_csv('fornecedores.csv'),
-    'Lojas': pd.read_csv('lojas.csv'),
-    'Vendas': pd.read_csv('vendas.csv'),
-    'Fornecedores_Produtos': pd.read_csv('fornecedores_produtos.csv'),
-    'Vendas_Produtos': pd.read_csv('vendas_produtos.csv')
+    'Clientes': pd.read_csv('data/clientes.csv'),
+    #'Produtos': pd.read_csv('data/produtos.csv'),
+    #'Fornecedores': pd.read_csv('data/fornecedores.csv'),
+    #'Lojas': pd.read_csv('data/lojas.csv'),
+    #'Vendas': pd.read_csv('data/vendas.csv'),
+    #'Fornecedores_Produtos': pd.read_csv('data/fornecedores_produtos.csv'),
+    #'Vendas_Produtos': pd.read_csv('data/vendas_produtos.csv')
 }
 
 if __name__ == '__main__':
