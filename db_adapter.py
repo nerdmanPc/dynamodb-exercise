@@ -34,7 +34,7 @@ class Table:
         update_expression = [f"{name} = :val_{name}" for name, value in attr.items()]
         update_expression = f"SET {', '.join(update_expression)}"
         expression_values = {f":val_{name}": value for name, value in attr.items()}
-        print(update_expression)
+        #print(update_expression)
         return self._dynamo_table.update_item(
             Key=key,
             UpdateExpression= update_expression,
