@@ -21,7 +21,9 @@ class Table:
         self._dynamo_table = dynamo_table
 
     def key_schema(self):
-        return self._dynamo_table.key_schema
+        schema = self._dynamo_table.key_schema
+        schema = {key['KeyType'] : key['AttributeName'] for key in schema}
+        return schema
 
     def put_item(self, item: dict):
         item = {k: _convert_float(v) for k, v in item.items()}
