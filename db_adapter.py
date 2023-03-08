@@ -25,6 +25,12 @@ class Table:
         schema = self._dynamo_table.key_schema
         schema = {key['KeyType'] : key['AttributeName'] for key in schema}
         return schema
+    
+    def secondary_indices(self):
+        return {
+            'GLOBAL': self._dynamo_table.global_secondary_indexes,
+            'LOCAL': self._dynamo_table.global_secondary_indexes,
+        }
 
     def put_item(self, item: dict):
         item = {k: _convert_float(v) for k, v in item.items()}
