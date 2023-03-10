@@ -6,8 +6,11 @@ import pandas as pd
 
 class Connection:
     #Credentials need to be set up beforehand
-    def __init__(self):
-        self._dynamodb = aws.resource('dynamodb')
+    def __init__(self, region=None):
+        kwargs = {}
+        if region:
+            kwargs['region_name'] = region
+        self._dynamodb = aws.resource('dynamodb', **kwargs)
 
     def get_table(self, name: str):
         return Table(self._dynamodb.Table(name))
@@ -54,7 +57,7 @@ class Table:
     def delete_item(self, key: dict):
         return self._dynamo_table.delete_item(Key=key)
 
-    def query(self, key_expr, filter_expr=None, index=None,  as_df=True):
+    def query(self, key_expr, filter_expr=None, index=None, projection=None, limit=None, as_df=True):
         query_args = {
             'KeyConditionExpression': key_expr
         }
@@ -62,6 +65,10 @@ class Table:
             query_args['FilterExpression'] = filter_expr
         if index is not None:
             query_args['IndexName'] = index
+        if projection is not None:
+            query_args['ProjectionExpression'] = projection
+        if limit is not None:
+            query_args['Limit'] = limit
 
         response = self._dynamo_table.query(**query_args)
         items = response['Items']
@@ -75,10 +82,14 @@ class Table:
             return items
         return to_df(items, self.key_schema())
     
-    def scan(self, filter_expr=None, as_df=True):
+    def scan(self, filter_expr=None, projection=None, limit=None, as_df=True):
         query_args = dict()
         if filter_expr is not None:
             query_args['FilterExpression'] = filter_expr
+        if projection is not None:
+            query_args['ProjectionExpression'] = projection
+        if limit is not None:
+            query_args['Limit'] = limit
 
         response = self._dynamo_table.scan(**query_args)
         items = response['Items']
